@@ -1,0 +1,18 @@
+[
+  {
+    "id": "rep_1794341801634_dvy0",
+    "timestamp": "2026-11-10T20:16:41.634Z",
+    "herName": "Tejaswi",
+    "selectedMood": {
+      "emoji": "🌸",
+      "title": "People Fatigue"
+    },
+    "batteryLevel": 3,
+    "overthinkingLevel": 7,
+    "selectedCraving": {
+      "emoji": "🧋",
+      "label": "Boba"
+    },
+    "specialNoteToFriend": "Get me boba tomorrow please!"
+  }
+]

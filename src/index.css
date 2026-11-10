@@ -1,0 +1,204 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #090d16;
+    color: #f1f5f9;
+    overflow-x: hidden;
+  }
+}
+
+.font-outfit {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(3deg);
+  }
+}
+
+@keyframes pulseGently {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.animate-pulse-gentle {
+  animation: pulseGently 2.5s ease-in-out infinite;
+}
+
+@keyframes breatheCircle {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+    filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.35));
+  }
+  33.33% {
+    transform: scale(1.18);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 35px rgba(168, 85, 247, 0.75));
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 38px rgba(244, 63, 94, 0.7));
+  }
+  83.33% {
+    transform: scale(0.7);
+    opacity: 0.5;
+    filter: drop-shadow(0 0 16px rgba(99, 102, 241, 0.4));
+  }
+  100% {
+    transform: scale(0.7);
+    opacity: 0.5;
+    filter: drop-shadow(0 0 12px rgba(244, 63, 94, 0.35));
+  }
+}
+
+@keyframes breatheRipple {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.2;
+  }
+  33.33% {
+    transform: scale(1.38);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.38);
+    opacity: 0.65;
+  }
+  83.33% {
+    transform: scale(0.65);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.65);
+    opacity: 0.2;
+  }
+}
+
+@keyframes breatheHalo {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-breathe {
+  animation: breatheCircle 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-breathe-ripple {
+  animation: breatheRipple 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-breathe-halo {
+  animation: breatheHalo 20s linear infinite;
+}
+
+@keyframes smokeDrift {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-16px) translateX(6px) scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-34px) translateX(-4px) scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes emberPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px #f97316);
+    opacity: 0.85;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px #ef4444);
+    opacity: 1;
+  }
+}
+
+.animate-smoke {
+  animation: smokeDrift 2.4s ease-out infinite;
+}
+
+.animate-smoke-delayed {
+  animation: smokeDrift 2.4s ease-out 1.2s infinite;
+}
+
+.animate-ember {
+  animation: emberPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes waterDropPlop {
+  0% {
+    transform: translateY(-28px) scale(0.6);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(0px) scale(1.25, 0.85);
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(-6px) scale(0.95, 1.05);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes waterRippleOut {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes dropletFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-water-drop {
+  animation: waterDropPlop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-water-ripple {
+  animation: waterRippleOut 0.6s ease-out forwards;
+}
+
+.animate-droplet-float {
+  animation: dropletFloat 3s ease-in-out infinite;
+}
+
+
+

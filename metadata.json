@@ -1,0 +1,6 @@
+{
+  "name": "Tejaswi's Vibe Check & Date Mission",
+  "description": "A thoughtful, interactive mood and wellness check for Tejaswi to de-stress, vent, and get tailored pampering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
