@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { StoredReport } from '../types';
+import { deleteLocalReport, getLocalReports } from '../utils/reports';
 import { sound } from '../utils/audio';
 import { triggerHaptic } from '../utils/haptics';
 import { MoodHistoryChart } from './MoodHistoryChart';
@@ -34,30 +35,22 @@ export const FriendsVaultModal: React.FC<FriendsVaultModalProps> = ({
   const fetchReports = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/reports');
-      const data = await res.json();
-      setReports(data.reports || []);
+      setReports(getLocalReports() as StoredReport[]);
     } catch (err) {
-      console.error('Failed to load reports:', err);
+      console.error('Failed to load local reports:', err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isOpen) {
-      fetchReports();
-    }
+    if (isOpen) fetchReports();
   }, [isOpen]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     triggerHaptic(15);
-    try {
-      await fetch(`/api/reports/${id}`, { method: 'DELETE' });
-      setReports((prev) => prev.filter((r) => r.id !== id));
-    } catch {
-      // Ignore
-    }
+    deleteLocalReport(id);
+    setReports((prev) => prev.filter((r) => r.id !== id));
   };
 
   const handleCopyReport = (report: StoredReport) => {
@@ -93,13 +86,13 @@ export const FriendsVaultModal: React.FC<FriendsVaultModalProps> = ({
             </div>
             <div>
               <h2 className="font-outfit font-bold text-base text-slate-100 flex items-center gap-1.5">
-                Friend's Insights Vault
+                This Browser's Insights Vault
                 <span className="text-[10px] text-emerald-400 font-mono bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800/60">
-                  Live Sync
+                  Local Only
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400">
-                What Tejaswi selected, her notes, and exact needs.
+                Check-ins saved on this device only.
               </p>
             </div>
           </div>
@@ -126,13 +119,13 @@ export const FriendsVaultModal: React.FC<FriendsVaultModalProps> = ({
           {loading ? (
             <div className="py-12 text-center text-slate-500 text-xs">
               <RefreshCw className="w-5 h-5 mx-auto mb-2 animate-spin text-purple-400" />
-              <span>Checking database for latest reports...</span>
+              <span>Loading saved check-ins...</span>
             </div>
           ) : reports.length === 0 ? (
             <div className="py-12 text-center text-slate-500 text-xs space-y-1">
               <p className="font-semibold text-slate-300">No reports recorded yet.</p>
               <p className="text-[11px] text-slate-500 max-w-xs mx-auto">
-                As soon as Tejaswi completes the vibe check or types a note, her responses will appear here in real-time!
+                Check-ins saved in this browser will appear here. They are not uploaded or shared.
               </p>
             </div>
           ) : (
@@ -275,7 +268,7 @@ export const FriendsVaultModal: React.FC<FriendsVaultModalProps> = ({
 
         {/* Footer info */}
         <div className="p-3 bg-slate-950 border-t border-slate-800 text-[10px] text-slate-500 text-center">
-          Persistently stored on the server · Safe & private for your friendship check-in.
+          Saved in this browser only · Clearing browser data will erase these entries.
         </div>
       </div>
     </div>
