@@ -35,7 +35,7 @@ export const AIPamperSection: React.FC<AIPamperSectionProps> = ({
     });
   };
 
-  // Generate AI Pampering on Mount if not already loaded
+  // Prepare a personalized comfort plan on Mount if not already loaded
   useEffect(() => {
     if (aiData) return;
 
@@ -114,8 +114,8 @@ export const AIPamperSection: React.FC<AIPamperSectionProps> = ({
             </div>
             <div>
               <span className="font-outfit font-bold text-sm text-slate-100 flex items-center gap-1.5">
-                AI Pampering Analysis
-                <span className="text-[10px] text-purple-400 font-normal">Gemini Engine</span>
+                Personalized Pampering Plan
+                <span className="text-[10px] text-purple-400 font-normal">Offline comfort guide</span>
               </span>
             </div>
           </div>
@@ -216,7 +216,7 @@ export const AIPamperSection: React.FC<AIPamperSectionProps> = ({
         <div className="flex items-center gap-1.5 mb-2">
           <Heart className="w-3.5 h-3.5 text-rose-400" />
           <span className="font-outfit font-bold text-xs text-slate-100">
-            Instant Vent & Soothe (AI Safe Box)
+            Instant Vent & Soothe (Private Vent & Soothe)
           </span>
         </div>
         <p className="text-[11px] text-slate-400 mb-3">
