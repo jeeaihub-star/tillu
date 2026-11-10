@@ -35,72 +35,43 @@ export const AIPamperSection: React.FC<AIPamperSectionProps> = ({
     });
   };
 
-  // Prepare a personalized comfort plan on Mount if not already loaded
+  // Build the comfort plan locally: no network or AI service required.
   useEffect(() => {
     if (aiData) return;
-
-    let isMounted = true;
-    async function fetchPamperPlan() {
-      setLoading(true);
-      try {
-        const res = await fetch('/api/gemini/pamper', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            moodTitle: sessionData.selectedMood?.title,
-            batteryLevel: sessionData.batteryLevel,
-            overthinkingLevel: sessionData.overthinkingLevel,
-            craving: sessionData.selectedCraving?.label,
-            situationTitle: sessionData.selectedSituation?.title,
-            supportPreference: sessionData.selectedSupport?.title,
-            personalNote: sessionData.specialNoteToFriend,
-            problemCategory: sessionData.problemCategory,
-            customProblemText: sessionData.customProblemText,
-          }),
-        });
-        const data = await res.json();
-        if (isMounted) {
-          setAiData(data);
-          if (onAIGenerated) onAIGenerated(data);
-        }
-      } catch (err) {
-        console.error('Error fetching pamper plan:', err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
-
-    fetchPamperPlan();
-    return () => {
-      isMounted = false;
+    const mood = sessionData.selectedMood?.title || 'overwhelmed';
+    const craving = sessionData.selectedCraving?.label || 'something comforting';
+    const battery = Math.max(0, Math.min(10, sessionData.batteryLevel)) * 10;
+    const result: AIPamperResult = {
+      validation: `Feeling ${mood.toLowerCase()} with around ${battery}% of your energy is understandable. You do not have to solve everything at once; taking a pause is a worthwhile step.`,
+      pamperRitual: [
+        `Comfort break: enjoy ${craving} somewhere cozy, without feeling guilty about resting.`,
+        'Quiet window: silence non-essential notifications for 20 minutes and give yourself a little breathing room.',
+        'One gentle reset: stretch, wash your face, or listen to a favorite song—choose whichever feels easiest.',
+      ],
+      friendPlaybook: [
+        'Check in gently and let her choose whether she wants to talk or simply have company.',
+        'Listen without rushing to fix the situation or offering unsolicited advice.',
+        'Offer one practical kindness, such as a snack, a short walk, or help with a small task.',
+      ],
+      affirmation: 'You deserve care and patience, including from yourself, even on the days when everything feels difficult.',
     };
+    setAiData(result);
+    setLoading(false);
+    onAIGenerated?.(result);
   }, []);
 
-  const handleInstantSoothe = async (e: React.FormEvent) => {
+  const handleInstantSoothe = (e: React.FormEvent) => {
     e.preventDefault();
     if (!ventText.trim() || ventLoading) return;
-
     triggerHaptic(15);
     sound.playSparkle();
     setVentLoading(true);
-
-    try {
-      const res = await fetch('/api/gemini/vent-soothe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ vent: ventText }),
-      });
-      const data = await res.json();
-      setVentResponse(data);
-      setVentText('');
-    } catch {
-      setVentResponse({
-        insight: 'Whatever is on your mind, you do not have to solve it all tonight.',
-        soothingTip: 'Take three slow deep breaths and let yourself rest.',
-      });
-    } finally {
-      setVentLoading(false);
-    }
+    setVentResponse({
+      insight: 'It can be exhausting to carry something that matters this much. Your feelings deserve room, and you do not have to figure everything out in one sitting.',
+      soothingTip: 'Unclench your jaw, take three slow breaths, sip some water, and choose one small thing that would make the next ten minutes easier.',
+    });
+    setVentText('');
+    setVentLoading(false);
   };
 
   return (
