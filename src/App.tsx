@@ -16,6 +16,7 @@ import { FloatingStressBusters } from './components/FloatingStressBusters';
 import { FriendsVaultModal } from './components/FriendsVaultModal';
 import { MicroVibeBar, MicroVibeItem } from './components/MicroVibeBar';
 import { lofiMusic } from './utils/lofiAudio';
+import { saveLocalReport } from './utils/reports';
 
 const initialSessionData: UserSessionData = {
   herName: 'Tejaswi',
@@ -169,27 +170,19 @@ export default function App() {
       selectedMood: updatedMood,
     }));
 
-    // Auto-sync micro-vibe to backend so her friend's vault updates in real-time
-    try {
-      await fetch('/api/reports', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          herName: session.herName,
-          selectedMood: updatedMood,
-          batteryLevel: session.batteryLevel,
-          overthinkingLevel: session.overthinkingLevel,
-          problemCategory: session.problemCategory,
-          customProblemText: session.customProblemText,
-          hateAnswer: session.hateAnswer,
-          noDodgeCount: session.noDodgeCount,
-          specialNoteToFriend: session.specialNoteToFriend,
-          aiPamper: session.aiPamper,
-        }),
-      });
-    } catch {
-      // Background sync non-blocking
-    }
+    // Save micro-vibe locally on this device; no shared server endpoint.
+    saveLocalReport({
+      herName: session.herName,
+      selectedMood: updatedMood,
+      batteryLevel: session.batteryLevel,
+      overthinkingLevel: session.overthinkingLevel,
+      problemCategory: session.problemCategory,
+      customProblemText: session.customProblemText,
+      hateAnswer: session.hateAnswer,
+      noDodgeCount: session.noDodgeCount,
+      specialNoteToFriend: session.specialNoteToFriend,
+      aiPamper: session.aiPamper,
+    });
   };
 
   return (
