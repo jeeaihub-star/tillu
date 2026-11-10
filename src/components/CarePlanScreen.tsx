@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { UserSessionData, AIPamperResult } from '../types';
+import { saveLocalReport } from '../utils/reports';
 import { sound } from '../utils/audio';
 import { triggerHaptic } from '../utils/haptics';
 import { AIPamperSection } from './AIPamperSection';
@@ -117,32 +118,28 @@ export const CarePlanScreen: React.FC<CarePlanScreenProps> = ({
     finalized = isFinalized
   ) => {
     try {
-      await fetch('/api/reports', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          herName: sessionData.herName,
-          selectedMood: sessionData.selectedMood,
-          selectedCraving: sessionData.selectedCraving,
-          selectedSituation: sessionData.selectedSituation,
-          selectedSupport: sessionData.selectedSupport,
-          batteryLevel: sessionData.batteryLevel,
-          overthinkingLevel: sessionData.overthinkingLevel,
-          problemCategory: sessionData.problemCategory,
-          customProblemText: sessionData.customProblemText,
-          hateAnswer: sessionData.hateAnswer,
-          noDodgeCount: sessionData.noDodgeCount,
-          specialNoteToFriend: noteText,
-          aiPamper: aiResult || sessionData.aiPamper,
-          planFinalized: finalized,
-          finalizedAt: finalized
-            ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : undefined,
-        }),
+      saveLocalReport({
+        herName: sessionData.herName,
+        selectedMood: sessionData.selectedMood,
+        selectedCraving: sessionData.selectedCraving,
+        selectedSituation: sessionData.selectedSituation,
+        selectedSupport: sessionData.selectedSupport,
+        batteryLevel: sessionData.batteryLevel,
+        overthinkingLevel: sessionData.overthinkingLevel,
+        problemCategory: sessionData.problemCategory,
+        customProblemText: sessionData.customProblemText,
+        hateAnswer: sessionData.hateAnswer,
+        noDodgeCount: sessionData.noDodgeCount,
+        specialNoteToFriend: noteText,
+        aiPamper: aiResult || sessionData.aiPamper,
+        planFinalized: finalized,
+        finalizedAt: finalized
+          ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          : undefined,
       });
       setSavedToBackend(true);
     } catch (err) {
-      console.error('Failed to sync report to backend:', err);
+      console.error('Failed to save report in this browser:', err);
     }
   };
 
