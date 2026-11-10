@@ -31,33 +31,16 @@ export const VentJournalScreen: React.FC<VentJournalScreenProps> = ({
   const [aiLoading, setAiLoading] = useState<boolean>(false);
   const [aiAdvice, setAiAdvice] = useState<{ insight: string; soothingTip: string } | null>(null);
 
-  const handleGetAIAdvice = async () => {
+  const handleGetAIAdvice = () => {
     if (!journalText.trim() || aiLoading) return;
-
     triggerHaptic(15);
     sound.playSparkle();
     setAiLoading(true);
-
-    try {
-      const activeCat = CATEGORIES.find((c) => c.id === selectedCategory)?.label;
-      const res = await fetch('/api/gemini/vent-soothe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          vent: journalText,
-          category: activeCat,
-        }),
-      });
-      const data = await res.json();
-      setAiAdvice(data);
-    } catch {
-      setAiAdvice({
-        insight: 'Carrying all of this by yourself would exhaust anyone. Your feelings make total sense.',
-        soothingTip: 'Put on warm socks, drink a glass of water, and give yourself permission to pause.',
-      });
-    } finally {
-      setAiLoading(false);
-    }
+    setAiAdvice({
+      insight: 'Carrying all of this by yourself would exhaust anyone. Your feelings make sense, and you deserve support without judgement or pressure.',
+      soothingTip: 'Put on warm socks, drink a glass of water, and give yourself permission to pause for a few minutes.',
+    });
+    setAiLoading(false);
   };
 
   const handleProceed = () => {
